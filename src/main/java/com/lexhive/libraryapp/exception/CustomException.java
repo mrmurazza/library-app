@@ -22,7 +22,6 @@ public class CustomException extends RuntimeException {
         // Member-Related Errors
         MEMBER_NOT_FOUND,
         MEMBER_HAS_OVERDUE_LOAN,
-        MEMBER_ID_REQUIRED,
         MEMBER_ACCOUNT_NOT_LINKED,
         EMAIL_ALREADY_EXISTS,
 
@@ -55,8 +54,8 @@ public class CustomException extends RuntimeException {
         return new CustomException(HttpStatus.NOT_FOUND, code, message);
     }
 
-    public static CustomException conflict(Code code, String message) {
-        return new CustomException(HttpStatus.CONFLICT, code, message);
+    public static CustomException unprocessableEntity(Code code, String message) {
+        return new CustomException(HttpStatus.UNPROCESSABLE_ENTITY, code, message);
     }
 
     public static CustomException badRequest(Code code, String message) {

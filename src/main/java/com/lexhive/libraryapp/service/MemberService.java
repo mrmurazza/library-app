@@ -39,7 +39,7 @@ public class MemberService {
         String email = request.email().trim().toLowerCase();
 
         if (memberRepository.existsByEmail(email)) {
-            throw CustomException.conflict(Code.EMAIL_ALREADY_EXISTS, "Email " + email + " is already registered");
+            throw CustomException.unprocessableEntity(Code.EMAIL_ALREADY_EXISTS, "Email " + email + " is already registered");
         }
 
         Member member = memberRepository.save(new Member(request.name().trim(), email));
