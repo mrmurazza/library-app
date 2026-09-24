@@ -18,7 +18,6 @@ The Maven plugin will loads a small catalog and two members from seeder (`razza@
 
 Swagger UI is at <http://localhost:8080/swagger-ui.html>.
 Health is at <http://localhost:8080/actuator/health>.
-Prometheus metrics are at <http://localhost:8080/actuator/prometheus>.
 
 ## Login Credentials
 
