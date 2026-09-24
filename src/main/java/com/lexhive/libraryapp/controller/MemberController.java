@@ -17,10 +17,12 @@ import com.lexhive.libraryapp.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/members")
+@RolesAllowed("ADMIN")
 @Tag(name = "Members")
 public class MemberController {
 

@@ -106,7 +106,7 @@ public class LoanService {
 
     @Transactional(readOnly = true)
     public List<LoanResponse> list(LoanStatus status, CurrentUser user) {
-        Long memberId = user.admin() ? null : user.memberId();
+        Long memberId = user.isAdmin() ? null : user.memberId();
         return loanRepository.findByMemberIdAndStatus(memberId, status).stream()
                 .map(LoanResponse::fromEntity)
                 .toList();

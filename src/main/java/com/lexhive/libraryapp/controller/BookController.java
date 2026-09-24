@@ -20,6 +20,7 @@ import com.lexhive.libraryapp.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 
 @RestController
@@ -46,6 +47,7 @@ public class BookController {
     }
 
     @PostMapping
+    @RolesAllowed("ADMIN")
     @Operation(summary = "Add a book")
     public ResponseEntity<BookResponse> addBook(@Valid @RequestBody CreateBookRequest request) {
         BookResponse body = bookService.createBook(request);
@@ -54,12 +56,14 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
+    @RolesAllowed("ADMIN")
     @Operation(summary = "Update a book")
     public BookResponse updateBook(@PathVariable long id, @Valid @RequestBody UpdateBookRequest request) {
         return bookService.updateBook(id, request);
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed("ADMIN")
     @Operation(summary = "Delete a book that has never been loaned")
     public ResponseEntity<Void> deleteBook(@PathVariable long id) {
         bookService.deleteBook(id);
