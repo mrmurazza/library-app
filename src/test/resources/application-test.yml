@@ -1,12 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/library_app_test
+    username: root
+    password:
+
 app:
   security:
     users:
-      - username: librarian
-        password: '$2a$10$j/ZT03OD1Q0AgRFhDukuGuMdICHppfhST/ydwag00u2tvKesldCTK'
+      - username: admin@admin.com
+        password: '$2a$10$S00kD3E/fVHwKrLX57msE.t6byXuEVISWFaXs7i3AjPQ6Th3WBIFi'
         role: ADMIN
-      - username: razza@library.test
+      - username: razza@razza.com
         password: '$2a$10$8f8NEIeXXOWn8C0iJPPgI.yBa5lsxf9cZpSk43uNBB1CUOjWof3VC'
         role: MEMBER
-      - username: rafif@library.test
-        password: '$2a$10$zL.Yly.Cfw6lr3l9Ndx1Hu87zxz40J3xmrjbCZTpzeGEArvIaSRV6'
+      - username: rafif@rafif.com
+        password: '$2a$10$i0PO0wro8tBsW.2KnN0WE.PMFgRYGG7oJ3r7Y.a1z6HwKOGpODddm'
         role: MEMBER
