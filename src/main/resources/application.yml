@@ -16,12 +16,25 @@ spring:
   flyway:
     enabled: true
 
+server:
+  port: 8080
+
 library:
   max-active-loans: 3
   loan-duration-days: 14
 
-server:
-  port: 8080
+app:
+  security:
+    users:
+      - username: admin
+        password: $2a$10$5mxv7rMtqDLJQAo03IiYvOpULZpNA.XL0h5Z0ApwlEQ.11NcvC1Xq
+        role: ADMIN
+      - username: razza
+        password: $2a$10$1U7GcuDtUdSOScHLXTYrV.LqS6okYhNdqwHzB/vP8KpYa8VvtfXMi
+        role: MEMBER
+      - username: rafif
+        password: $2a$10$rIpwHWVDznIpJbcS3xgWXuwuqxBCmTuD3RTss2omuJwsWIUqVgi0S
+        role: MEMBER
 
 info:
   app:

@@ -1,0 +1,12 @@
+app:
+  security:
+    users:
+      - username: librarian
+        password: '$2a$10$j/ZT03OD1Q0AgRFhDukuGuMdICHppfhST/ydwag00u2tvKesldCTK'
+        role: ADMIN
+      - username: razza@library.test
+        password: '$2a$10$8f8NEIeXXOWn8C0iJPPgI.yBa5lsxf9cZpSk43uNBB1CUOjWof3VC'
+        role: MEMBER
+      - username: rafif@library.test
+        password: '$2a$10$zL.Yly.Cfw6lr3l9Ndx1Hu87zxz40J3xmrjbCZTpzeGEArvIaSRV6'
+        role: MEMBER
