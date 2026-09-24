@@ -40,13 +40,13 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
                     request.getMethod(),
                     request.getRequestURI(),
                     params,
-                    body(cachedRequest),
+                    getStringBody(cachedRequest),
                     response.getStatus(),
                     latencyMs);
         }
     }
 
-    private static String body(ContentCachingRequestWrapper request) {
+    private static String getStringBody(ContentCachingRequestWrapper request) {
         byte[] content = request.getContentAsByteArray();
         if (content.length == 0) {
             return "";
