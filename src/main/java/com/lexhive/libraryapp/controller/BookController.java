@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lexhive.libraryapp.dto.ApiResponse;
 import com.lexhive.libraryapp.dto.BookResponse;
 import com.lexhive.libraryapp.dto.CreateBookRequest;
 import com.lexhive.libraryapp.dto.UpdateBookRequest;
@@ -36,21 +37,26 @@ public class BookController {
 
     @GetMapping
     @Operation(summary = "List the catalog")
-    public List<BookResponse> GetBookCatalogList() {
-        return bookService.list();
+    public ApiResponse<List<BookResponse>> GetBookCatalogList() {
+        List<BookResponse> books = bookService.list();
+
+        return ApiResponse.of(books);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get one book")
-    public BookResponse GetBook(@PathVariable long id) {
-        return bookService.getBook(id);
+    public ApiResponse<BookResponse> GetBook(@PathVariable long id) {
+        BookResponse book = bookService.getBook(id);
+
+        return ApiResponse.of(book);
     }
 
     @PostMapping
     @RolesAllowed("ADMIN")
     @Operation(summary = "Add a book")
-    public ResponseEntity<BookResponse> addBook(@Valid @RequestBody CreateBookRequest request) {
-        BookResponse body = bookService.createBook(request);
+    public ResponseEntity<ApiResponse<BookResponse>> addBook(@Valid @RequestBody CreateBookRequest request) {
+        BookResponse created = bookService.createBook(request);
+        ApiResponse<BookResponse> body = ApiResponse.of(created);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
@@ -58,8 +64,10 @@ public class BookController {
     @PatchMapping("/{id}")
     @RolesAllowed("ADMIN")
     @Operation(summary = "Update a book")
-    public BookResponse updateBook(@PathVariable long id, @Valid @RequestBody UpdateBookRequest request) {
-        return bookService.updateBook(id, request);
+    public ApiResponse<BookResponse> updateBook(@PathVariable long id, @Valid @RequestBody UpdateBookRequest request) {
+        BookResponse updated = bookService.updateBook(id, request);
+
+        return ApiResponse.of(updated);
     }
 
     @DeleteMapping("/{id}")

@@ -55,7 +55,7 @@ abstract class ControllerIntegrationTest {
                         {"name":"%s","email":"%s"}
                         """.formatted(name, email)));
         assertThat(response.getStatus()).isEqualTo(201);
-        return read(response, "$.id", Number.class).longValue();
+        return read(response, "$.data.id", Number.class).longValue();
     }
 
     long populateBook(String title, String isbn, int copies) throws Exception {
@@ -66,7 +66,7 @@ abstract class ControllerIntegrationTest {
                         {"title":"%s","author":"Author","isbn":"%s","total_copies":%d}
                         """.formatted(title, isbn, copies)));
         assertThat(response.getStatus()).isEqualTo(201);
-        return read(response, "$.id", Number.class).longValue();
+        return read(response, "$.data.id", Number.class).longValue();
     }
 
     static RequestPostProcessor admin() {

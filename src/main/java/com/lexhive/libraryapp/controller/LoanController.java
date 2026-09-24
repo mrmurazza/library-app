@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lexhive.libraryapp.authentication.CurrentUser;
+import com.lexhive.libraryapp.authentication.CurrentUserResolver;
+import com.lexhive.libraryapp.dto.ApiResponse;
 import com.lexhive.libraryapp.dto.CreateLoanRequest;
 import com.lexhive.libraryapp.dto.LoanResponse;
 import com.lexhive.libraryapp.dto.LoanStatus;
-import com.lexhive.libraryapp.authentication.CurrentUserResolver;
 import com.lexhive.libraryapp.service.LoanService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,21 +40,29 @@ public class LoanController {
 
     @PostMapping
     @Operation(summary = "Borrow a book")
-    public ResponseEntity<LoanResponse> creatBookLoan(@Valid @RequestBody CreateLoanRequest request, Authentication authentication) {
-        LoanResponse body = loanService.createLoan(request.bookId(), currentUserResolver.from(authentication));
+    public ResponseEntity<ApiResponse<LoanResponse>> creatBookLoan(@Valid @RequestBody CreateLoanRequest request, Authentication authentication) {
+        CurrentUser currentUser = currentUserResolver.from(authentication);
+        LoanResponse created = loanService.createLoan(request.bookId(), currentUser);
+        ApiResponse<LoanResponse> body = ApiResponse.of(created);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
     @PostMapping("/{id}/return")
     @Operation(summary = "Return a loan")
-    public LoanResponse returnLoan(@PathVariable long id, Authentication authentication) {
-        return loanService.returnLoan(id, currentUserResolver.from(authentication));
+    public ApiResponse<LoanResponse> returnLoan(@PathVariable long id, Authentication authentication) {
+        CurrentUser currentUser = currentUserResolver.from(authentication);
+        LoanResponse returned = loanService.returnLoan(id, currentUser);
+
+        return ApiResponse.of(returned);
     }
 
     @GetMapping
     @Operation(summary = "List loans. status=active includes overdue loans. Members only see their own.")
-    public List<LoanResponse> list(@RequestParam(required = false) LoanStatus status, Authentication authentication) {
-        return loanService.list(status, currentUserResolver.from(authentication));
+    public ApiResponse<List<LoanResponse>> list(@RequestParam(required = false) LoanStatus status, Authentication authentication) {
+        CurrentUser currentUser = currentUserResolver.from(authentication);
+        List<LoanResponse> loans = loanService.list(status, currentUser);
+
+        return ApiResponse.of(loans);
     }
 }

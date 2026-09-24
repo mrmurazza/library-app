@@ -38,13 +38,13 @@ class MemberControllerTest extends ControllerIntegrationTest {
                         """));
 
         assertThat(created.getStatus()).isEqualTo(201);
-        assertThat(read(created, "$.email", String.class)).isEqualTo("razza@library.test");
+        assertThat(read(created, "$.data.email", String.class)).isEqualTo("razza@library.test");
 
         var listed = send(get("/api/members").with(admin()));
 
         assertThat(listed.getStatus()).isEqualTo(200);
-        assertThat(read(listed, "$.length()", Integer.class)).isEqualTo(1);
-        assertThat(read(listed, "$[0].name", String.class)).isEqualTo("Razza");
+        assertThat(read(listed, "$.data.length()", Integer.class)).isEqualTo(1);
+        assertThat(read(listed, "$.data[0].name", String.class)).isEqualTo("Razza");
     }
 
     @Test
@@ -55,9 +55,9 @@ class MemberControllerTest extends ControllerIntegrationTest {
         var response = send(get("/api/members/{id}", memberId).with(admin()));
 
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(read(response, "$.id", Number.class).longValue()).isEqualTo(memberId);
-        assertThat(read(response, "$.name", String.class)).isEqualTo("Razza");
-        assertThat(read(response, "$.email", String.class)).isEqualTo("razza@library.test");
+        assertThat(read(response, "$.data.id", Number.class).longValue()).isEqualTo(memberId);
+        assertThat(read(response, "$.data.name", String.class)).isEqualTo("Razza");
+        assertThat(read(response, "$.data.email", String.class)).isEqualTo("razza@library.test");
     }
 
     @Test

@@ -56,22 +56,22 @@ class LoanControllerTest extends ControllerIntegrationTest {
                 .content(loanBody(bookId)));
 
         assertThat(created.getStatus()).isEqualTo(201);
-        assertThat(read(created, "$.member_id", Number.class).longValue()).isEqualTo(razza);
-        Instant borrowedAt = Instant.parse(read(created, "$.borrowed_at", String.class));
-        Instant dueDate = Instant.parse(read(created, "$.due_date", String.class));
+        assertThat(read(created, "$.data.member_id", Number.class).longValue()).isEqualTo(razza);
+        Instant borrowedAt = Instant.parse(read(created, "$.data.borrowed_at", String.class));
+        Instant dueDate = Instant.parse(read(created, "$.data.due_date", String.class));
         assertThat(dueDate).isEqualTo(borrowedAt.plus(14, ChronoUnit.DAYS));
-        assertThat(read(created, "$.returned_at", String.class)).isNull();
+        assertThat(read(created, "$.data.returned_at", String.class)).isNull();
 
         var book = send(get("/api/books/{id}", bookId).with(user1()));
-        assertThat(read(book, "$.available_copies", Integer.class)).isEqualTo(1);
+        assertThat(read(book, "$.data.available_copies", Integer.class)).isEqualTo(1);
 
         var razzaLoans = send(get("/api/loans").with(user1()));
         assertThat(razzaLoans.getStatus()).isEqualTo(200);
-        assertThat(read(razzaLoans, "$.length()", Integer.class)).isEqualTo(1);
+        assertThat(read(razzaLoans, "$.data.length()", Integer.class)).isEqualTo(1);
 
         var rafifLoans = send(get("/api/loans").with(user2()));
         assertThat(rafifLoans.getStatus()).isEqualTo(200);
-        assertThat(read(rafifLoans, "$.length()", Integer.class)).isZero();
+        assertThat(read(rafifLoans, "$.data.length()", Integer.class)).isZero();
     }
 
     @Test
@@ -92,7 +92,7 @@ class LoanControllerTest extends ControllerIntegrationTest {
         assertThat(code(response)).isEqualTo("LOAN_LIMIT_REACHED");
 
         var book = send(get("/api/books/{id}", fourth).with(user1()));
-        assertThat(read(book, "$.available_copies", Integer.class)).isEqualTo(1);
+        assertThat(read(book, "$.data.available_copies", Integer.class)).isEqualTo(1);
     }
 
     @Test
@@ -117,7 +117,7 @@ class LoanControllerTest extends ControllerIntegrationTest {
         assertThat(code(response)).isEqualTo("MEMBER_HAS_OVERDUE_LOAN");
 
         var book = send(get("/api/books/{id}", secondBook).with(user1()));
-        assertThat(read(book, "$.available_copies", Integer.class)).isEqualTo(1);
+        assertThat(read(book, "$.data.available_copies", Integer.class)).isEqualTo(1);
     }
 
     @Test
@@ -131,16 +131,16 @@ class LoanControllerTest extends ControllerIntegrationTest {
         var returned = send(post("/api/loans/{id}/return", loanId).with(user1()));
 
         assertThat(returned.getStatus()).isEqualTo(200);
-        assertThat(read(returned, "$.returned_at", String.class)).isNotNull();
+        assertThat(read(returned, "$.data.returned_at", String.class)).isNotNull();
         var restored = send(get("/api/books/{id}", bookId).with(user1()));
-        assertThat(read(restored, "$.available_copies", Integer.class)).isEqualTo(1);
+        assertThat(read(restored, "$.data.available_copies", Integer.class)).isEqualTo(1);
 
         var again = send(post("/api/loans/{id}/return", loanId).with(user1()));
 
         assertThat(again.getStatus()).isEqualTo(422);
         assertThat(code(again)).isEqualTo("LOAN_ALREADY_RETURNED");
         var unchanged = send(get("/api/books/{id}", bookId).with(user1()));
-        assertThat(read(unchanged, "$.available_copies", Integer.class)).isEqualTo(1);
+        assertThat(read(unchanged, "$.data.available_copies", Integer.class)).isEqualTo(1);
     }
 
     @Test
@@ -169,7 +169,7 @@ class LoanControllerTest extends ControllerIntegrationTest {
             assertThat(unavailable).isEqualTo(1);
 
             var book = send(get("/api/books/{id}", bookId).with(admin()));
-            assertThat(read(book, "$.available_copies", Integer.class)).isZero();
+            assertThat(read(book, "$.data.available_copies", Integer.class)).isZero();
         } finally {
             pool.shutdownNow();
         }
@@ -181,7 +181,7 @@ class LoanControllerTest extends ControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loanBody(bookId)));
         assertThat(response.getStatus()).isEqualTo(201);
-        return read(response, "$.id", Number.class).longValue();
+        return read(response, "$.data.id", Number.class).longValue();
     }
 
     private MockHttpServletResponse borrowAfter(

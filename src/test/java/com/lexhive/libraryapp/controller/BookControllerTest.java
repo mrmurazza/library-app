@@ -42,8 +42,8 @@ class BookControllerTest extends ControllerIntegrationTest {
         var response = send(get("/api/books").with(user1()));
 
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(read(response, "$.length()", Integer.class)).isEqualTo(1);
-        assertThat(read(response, "$[0].isbn", String.class)).isEqualTo("9780807083697");
+        assertThat(read(response, "$.data.length()", Integer.class)).isEqualTo(1);
+        assertThat(read(response, "$.data[0].isbn", String.class)).isEqualTo("9780807083697");
     }
 
     @Test
@@ -57,10 +57,10 @@ class BookControllerTest extends ControllerIntegrationTest {
                         """));
 
         assertThat(response.getStatus()).isEqualTo(201);
-        assertThat(read(response, "$.title", String.class)).isEqualTo("Dune");
-        assertThat(read(response, "$.isbn", String.class)).isEqualTo("9780441172719");
-        assertThat(read(response, "$.total_copies", Integer.class)).isEqualTo(3);
-        assertThat(read(response, "$.available_copies", Integer.class)).isEqualTo(3);
+        assertThat(read(response, "$.data.title", String.class)).isEqualTo("Dune");
+        assertThat(read(response, "$.data.isbn", String.class)).isEqualTo("9780441172719");
+        assertThat(read(response, "$.data.total_copies", Integer.class)).isEqualTo(3);
+        assertThat(read(response, "$.data.available_copies", Integer.class)).isEqualTo(3);
     }
 
     @Test
@@ -76,9 +76,9 @@ class BookControllerTest extends ControllerIntegrationTest {
                         """));
 
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(read(response, "$.title", String.class)).isEqualTo("Dune Messiah");
-        assertThat(read(response, "$.author", String.class)).isEqualTo("Frank Herbert");
-        assertThat(read(response, "$.total_copies", Integer.class)).isEqualTo(3);
+        assertThat(read(response, "$.data.title", String.class)).isEqualTo("Dune Messiah");
+        assertThat(read(response, "$.data.author", String.class)).isEqualTo("Frank Herbert");
+        assertThat(read(response, "$.data.total_copies", Integer.class)).isEqualTo(3);
     }
 
     @Test
@@ -128,8 +128,8 @@ class BookControllerTest extends ControllerIntegrationTest {
                         """));
 
         assertThat(lowered.getStatus()).isEqualTo(200);
-        assertThat(read(lowered, "$.total_copies", Integer.class)).isEqualTo(2);
-        assertThat(read(lowered, "$.available_copies", Integer.class)).isZero();
+        assertThat(read(lowered, "$.data.total_copies", Integer.class)).isEqualTo(2);
+        assertThat(read(lowered, "$.data.available_copies", Integer.class)).isZero();
 
         var rejected = send(patch("/api/books/{id}", bookId)
                 .with(admin())
@@ -142,7 +142,7 @@ class BookControllerTest extends ControllerIntegrationTest {
         assertThat(code(rejected)).isEqualTo("COPIES_BELOW_LOANED");
 
         var current = send(get("/api/books/{id}", bookId).with(admin()));
-        assertThat(read(current, "$.total_copies", Integer.class)).isEqualTo(2);
+        assertThat(read(current, "$.data.total_copies", Integer.class)).isEqualTo(2);
     }
 
     private void borrow(long bookId) throws Exception {
