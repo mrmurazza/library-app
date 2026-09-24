@@ -2,9 +2,12 @@ package com.lexhive.libraryapp.dto;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.lexhive.libraryapp.entity.Book;
 import com.lexhive.libraryapp.entity.Loan;
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record LoanResponse(
         Long id,
         Long bookId,

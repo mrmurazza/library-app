@@ -1,7 +1,10 @@
 package com.lexhive.libraryapp.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.lexhive.libraryapp.entity.Book;
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record BookResponse(
         Long id,
         String title,
