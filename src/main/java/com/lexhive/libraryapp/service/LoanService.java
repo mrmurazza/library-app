@@ -3,6 +3,9 @@ package com.lexhive.libraryapp.service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,12 +62,12 @@ public class LoanService {
 
         Loan loan = loanRepository.save(new Loan(book, member, borrowedAt, dueDate));
 
-        return LoanResponse.fromEntity(loan);
+        return LoanResponse.fromEntity(loan, book);
     }
 
     private void validateBorrowing(Book book, Instant borrowedAt, List<Loan> loans) throws CustomException {
         if (book.getAvailableCopies() <= 0) {
-            throw CustomException.unprocessableEntity(Code.BOOK_UNAVAILABLE, String.format("No copies of book %d are available", book.getId()));
+            throw CustomException.unprocessableEntity(Code.BOOK_UNAVAILABLE, String.format("No copies of book %s are available", book.getTitle()));
         }
 
         List<Instant> dueDates = loans.stream().map(Loan::getDueDate).toList();
@@ -86,12 +89,12 @@ public class LoanService {
         validateReturn(loan, user);
 
         Book book = bookRepository.findByIdForUpdate(loan.getBook().getId()).orElseThrow(() ->
-                CustomException.notFound(Code.BOOK_NOT_FOUND, String.format("Book %d was not found", loan.getBook().getId())));
+                CustomException.notFound(Code.BOOK_NOT_FOUND, String.format("Book not found")));
 
         loan.setReturnedAt(Instant.now());
         book.setAvailableCopies(book.getAvailableCopies() + 1);
 
-        return LoanResponse.fromEntity(loan);
+        return LoanResponse.fromEntity(loan, book);
     }
 
     private void validateReturn(Loan loan, CurrentUser user) throws CustomException {
@@ -100,15 +103,21 @@ public class LoanService {
         }
 
         if (loan.getReturnedAt() != null) {
-            throw CustomException.unprocessableEntity(Code.LOAN_ALREADY_RETURNED, String.format("Loan %d is already returned", loan.getId()));
+            throw CustomException.unprocessableEntity(Code.LOAN_ALREADY_RETURNED,
+                String.format("Loan with id %d for book %s is already returned", loan.getId(), loan.getBook().getTitle()));
         }
     }
 
     @Transactional(readOnly = true)
     public List<LoanResponse> list(LoanStatus status, CurrentUser user) {
         Long memberId = user.isAdmin() ? null : user.memberId();
-        return loanRepository.findByMemberIdAndStatus(memberId, status).stream()
-                .map(LoanResponse::fromEntity)
+        List<Loan> loans = loanRepository.findByMemberIdAndStatus(memberId, status);
+        List<Long> bookIds = loans.stream().map(Loan::getBook).map(Book::getId).distinct().toList();
+
+        Map<Long, Book> books = bookRepository.findByIdIn(bookIds).stream().collect(Collectors.toMap(Book::getId, Function.identity()));
+
+        return loans.stream()
+                .map(loan -> LoanResponse.fromEntity(loan, books.get(loan.getBook().getId())))
                 .toList();
     }
 

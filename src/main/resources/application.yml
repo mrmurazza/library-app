@@ -3,8 +3,8 @@ spring:
     name: library-app
   datasource:
     url: jdbc:postgresql://localhost:5432/library_app
-    username: library_app
-    password: library_app
+    username: root
+    password:
   jpa:
     open-in-view: false
     hibernate:
@@ -26,17 +26,34 @@ library:
 app:
   security:
     users:
-      - username: admin
+      - username: admin@admin.com
         password: $2a$10$5mxv7rMtqDLJQAo03IiYvOpULZpNA.XL0h5Z0ApwlEQ.11NcvC1Xq
         role: ADMIN
-      - username: razza
+      - username: razza@razza.com
         password: $2a$10$1U7GcuDtUdSOScHLXTYrV.LqS6okYhNdqwHzB/vP8KpYa8VvtfXMi
         role: MEMBER
-      - username: rafif
+      - username: rafif@rafif.com
         password: $2a$10$rIpwHWVDznIpJbcS3xgWXuwuqxBCmTuD3RTss2omuJwsWIUqVgi0S
         role: MEMBER
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 info:
   app:
     name: library-app
     description: Catalog, members, and loans with config-driven borrowing rules.
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %logger{40} - %msg%n"
