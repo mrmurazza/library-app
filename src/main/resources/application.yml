@@ -16,6 +16,10 @@ spring:
   flyway:
     enabled: true
 
+library:
+  max-active-loans: 3
+  loan-duration-days: 14
+
 server:
   port: 8080
 

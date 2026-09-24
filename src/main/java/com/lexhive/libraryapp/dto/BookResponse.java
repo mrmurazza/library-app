@@ -11,7 +11,7 @@ public record BookResponse(
         int availableCopies
 ) {
 
-    public static BookResponse from(Book book) {
+    public static BookResponse fromEntity(Book book) {
         return new BookResponse(
                 book.getId(),
                 book.getTitle(),
