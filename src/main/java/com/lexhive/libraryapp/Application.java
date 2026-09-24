@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.lexhive.libraryapp.config.LibraryConfig;
-import com.lexhive.libraryapp.config.StaticUsers;
+import com.lexhive.libraryapp.authentication.StaticUsers;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LibraryConfig.class, StaticUsers.class})

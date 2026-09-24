@@ -21,7 +21,7 @@ import com.lexhive.libraryapp.exception.CustomException.Code;
 import com.lexhive.libraryapp.repository.BookRepository;
 import com.lexhive.libraryapp.repository.LoanRepository;
 import com.lexhive.libraryapp.repository.MemberRepository;
-import com.lexhive.libraryapp.security.CurrentUser;
+import com.lexhive.libraryapp.authentication.CurrentUser;
 
 @Service
 public class LoanService {

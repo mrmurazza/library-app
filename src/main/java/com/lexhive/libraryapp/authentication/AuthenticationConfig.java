@@ -1,4 +1,4 @@
-package com.lexhive.libraryapp.config;
+package com.lexhive.libraryapp.authentication;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableMethodSecurity(jsr250Enabled = true)
-public class SecurityConfig {
+public class AuthenticationConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     UserDetailsService userDetailsService(StaticUsers staticUsers) {
         if (staticUsers.users() == null || staticUsers.users().isEmpty()) {
-            throw new IllegalStateException("must define at least one static user via 'app.security.users' in application.yml");
+            throw new IllegalStateException("must define at least one static user via 'app.authentication.users' in application.yml");
         }
 
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();

@@ -5,7 +5,7 @@ spring:
     password:
 
 app:
-  security:
+  authentication:
     users:
       - username: admin@admin.com
         password: '$2a$10$S00kD3E/fVHwKrLX57msE.t6byXuEVISWFaXs7i3AjPQ6Th3WBIFi'

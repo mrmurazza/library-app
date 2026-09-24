@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lexhive.libraryapp.dto.CreateLoanRequest;
 import com.lexhive.libraryapp.dto.LoanResponse;
 import com.lexhive.libraryapp.dto.LoanStatus;
-import com.lexhive.libraryapp.security.CurrentUserResolver;
+import com.lexhive.libraryapp.authentication.CurrentUserResolver;
 import com.lexhive.libraryapp.service.LoanService;
 
 import io.swagger.v3.oas.annotations.Operation;

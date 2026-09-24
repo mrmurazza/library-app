@@ -24,7 +24,7 @@ library:
   loan-duration-days: 14
 
 app:
-  security:
+  authentication:
     users:
       - username: admin@admin.com
         password: $2a$10$5mxv7rMtqDLJQAo03IiYvOpULZpNA.XL0h5Z0ApwlEQ.11NcvC1Xq
